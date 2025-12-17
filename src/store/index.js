@@ -7,11 +7,13 @@ import {
   onAuthStateChanged 
 } from 'firebase/auth'
 import { doc, setDoc, getDoc } from 'firebase/firestore'
+import { collection, getDocs } from 'firebase/firestore'
 
 export default createStore({
   state: {
     user: null, 
-    authIsReady: false 
+    authIsReady: false,
+    products: []
   },
   mutations: {
     SET_USER(state, payload) {
@@ -19,6 +21,9 @@ export default createStore({
     },
     SET_AUTH_IS_READY(state, payload) {
       state.authIsReady = payload
+    },
+    SET_PRODUCTS(state, payload) {
+      state.products = payload
     }
   },
   actions: {
@@ -49,7 +54,7 @@ export default createStore({
       await signOut(auth)
       commit('SET_USER', null)
     },
-    
+
     fetchUser({ commit }) {
       onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -59,6 +64,20 @@ export default createStore({
         }
         commit('SET_AUTH_IS_READY', true)
       })
-    }
+    },
+
+    async fetchProducts({ commit }) {
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"))
+        // Mapping data dari Firestore agar formatnya rapi (id + data)
+        const products = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        commit('SET_PRODUCTS', products)
+      } catch (error) {
+        console.error("Error fetching products:", error)
+      }
+    },
   }
 })
