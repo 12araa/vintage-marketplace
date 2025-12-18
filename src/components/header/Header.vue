@@ -6,16 +6,16 @@ import { useRouter } from 'vue-router'
 const store = useStore()
 const router = useRouter()
 
-const isLoggedIn = computed(() => store.state.user !== null)
+const isLoggedIn = computed(() => store.state.auth.user !== null)
 
-const user = computed(() => store.state.user)
+const user = computed(() => store.state.auth.user)
 
 const handleLogout = async () => {
-  await store.dispatch('logout')
-  router.push('/login')
+  await store.dispatch('auth/logout')
+  router.push('/')
 }
 
-const cartCount = 1
+const cartCount = computed(() => store.getters['cart/cartCount'])
 const wishlistCount = 3
 </script>
 
@@ -55,7 +55,7 @@ const wishlistCount = 3
             <li class="nav-item position-relative">
               <router-link to="/cart" class="nav-link text-dark fs-5">
                 <i class="bi bi-cart"></i>
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                <span v-if="cartCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
                   {{ cartCount }}
                 </span>
               </router-link>

@@ -1,9 +1,9 @@
 <script setup>
-  import Header from './components/header/Header.vue';
-  import Footer from './components/footer/Footer.vue';
-  import { useStore } from 'vuex';
-  const store = useStore()
-  store.dispatch('fetchUser')
+import Header from './components/header/Header.vue';
+import Footer from './components/footer/Footer.vue';
+import { useStore } from 'vuex';
+const store = useStore()
+store.dispatch('auth/fetchUser')
 </script>
 
 <template>

@@ -29,7 +29,7 @@ const handleRegister = async () => {
   }
 
   try {
-    await store.dispatch('register', {
+    await store.dispatch('auth/register', {
         email: form.email,
         password: form.password,
         fullname: form.fullname,

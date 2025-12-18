@@ -15,7 +15,7 @@ const errorMsg = ref(null)
 
 const handleLogin = async () => {
   try {
-    await store.dispatch('login', form)
+    await store.dispatch('auth/login', form)
     router.push('/')
   } catch (err) {
     errorMsg.value = err.message.replace('Firebase: ', '')
