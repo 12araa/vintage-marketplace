@@ -33,17 +33,29 @@ const formatCurrency = (price) => {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(price || 0)
 }
 
-const handleOrder = () => {
+const handleOrder = async() => {
   if (!userAddress.recipientName || !userAddress.fullAddress || !userAddress.phone) {
     alert("Please fill in the shipping address completely.")
     return
   }
-  const randomNum = Math.floor(10000 + Math.random() * 90000)
-  orderId.value = `ORD-${randomNum}-823`
-  console.log("Mengirim barang ke:", userAddress)
+  const newOrder = {
+    items: store.state.cart.cart,
+    totalPrice: grandTotal.value,
+    shippingDetails: userAddress,
+    status: 'Paid', // Langsung anggap lunas
+    transactionDate: new Date().toISOString()
+  }
 
-  store.dispatch('cart/clearCart')
-  showModal.value = true
+  try {
+    await store.dispatch('order/saveOrder', newOrder)
+    store.dispatch('cart/clearCart')
+    orderId.value = `ORD-${Math.floor(Math.random() * 100000)}` 
+    showModal.value = true
+
+  } catch (err) {
+    alert("Gagal membuat pesanan. Cek koneksi internet.")
+    console.log(err)
+  }
 }
 
 const handleContinue = () => {
