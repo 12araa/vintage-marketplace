@@ -3,7 +3,6 @@ import { collection, addDoc } from 'firebase/firestore'
 
 export default {
   namespaced: true,
-
   state: {
     orders: []
   },

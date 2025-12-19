@@ -75,8 +75,8 @@ const wishlistCount = 3
                 <img src="https://ui-avatars.com/api/?name=User+Name&background=random" class="rounded-circle" width="32" height="32" alt="User">
               </a>
               <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                <li><router-link to="/profile" class="dropdown-item">Profile</router-link></li>
-                <li><a class="dropdown-item" href="#">Orders</a></li>
+                <li><router-link to="/user/profile" class="dropdown-item">Profile</router-link></li>
+                <li><router-link to="/user/history" class="dropdown-item">Orders</router-link></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><button class="dropdown-item text-danger" @click="handleLogout">Logout</button></li>
               </ul>

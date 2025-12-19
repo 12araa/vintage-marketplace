@@ -3,6 +3,11 @@ import HomeView from '@/views/HomeView.vue'
 import ProductDetail from '@/components/detail/ProductDetail.vue'
 import CartView from '../views/CartView.vue'
 import OrderConfirmationView from '@/views/OrderConfirmationView.vue'
+import UserView from '@/views/UserView.vue'
+import TransactionHistory from '@/components/user/TransactionHistory.vue'
+import UserProfile from '@/components/user/UserProfile.vue'
+import ChangePassword from '@/components/user/ChangePassword.vue'
+
 const routes = [
   {
     path: '/',
@@ -38,6 +43,27 @@ const routes = [
     path: '/order-confirmation',
     name: 'order-confirmation',
     component: OrderConfirmationView
+  },
+  {
+    path: '/user',
+    component: UserView,
+    children: [
+        {
+            path: 'history', 
+            name: 'transaction-history',
+            component: TransactionHistory
+        },
+        {
+            path: 'profile',
+            name: 'user-profile',
+            component: UserProfile
+        },
+        {
+            path: 'change-password',
+            name: 'change-password',
+            component: ChangePassword
+        }
+    ]
   }
 
 ]
