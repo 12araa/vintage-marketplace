@@ -2,9 +2,11 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
 const store = useStore()
 const router = useRouter()
+const searchKeyword = ref('')
 
 const isLoggedIn = computed(() => store.state.auth.user !== null)
 
@@ -14,6 +16,17 @@ const handleLogout = async () => {
   await store.dispatch('auth/logout')
   router.push('/')
 }
+
+const handleSearch = () => {
+  if (searchKeyword.value.trim()) {
+    router.push({ 
+      name: 'products',
+      query: { q: searchKeyword.value } 
+    });
+  } else {
+    router.push({ name: 'products' });
+  }
+};
 
 const cartCount = computed(() => store.getters['cart/cartCount'])
 const wishlistCount = 3
@@ -31,12 +44,18 @@ const wishlistCount = 3
       </button>
 
       <div class="collapse navbar-collapse" id="navbarContent">
-        <form class="d-flex mx-auto my-2 my-lg-0 w-50" role="search">
+        <form @submit.prevent="handleSearch" class="d-flex" role="search">
           <div class="input-group">
-            <span class="input-group-text bg-light border-end-0">
+            <span class="input-group-text bg-light border-0">
               <i class="bi bi-search text-muted"></i>
             </span>
-            <input class="form-control border-start-0 bg-light" type="search" placeholder="Search for items..." aria-label="Search">
+            <input 
+              v-model="searchKeyword"
+              class="form-control border-0 bg-light" 
+              type="search" 
+              placeholder="Search for items..." 
+              aria-label="Search"
+            >
           </div>
         </form>
 

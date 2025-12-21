@@ -33,7 +33,10 @@ const products = computed(() => store.state.product.products)
     <section class="container py-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="fw-bold text-dark">Popular items</h4>
-        <a href="#" class="text-success text-decoration-none small fw-bold">See all</a>
+        <RouterLink :to="{ name: 'products', query: { sort: 'popular' } }" 
+         class="text-success text-decoration-none small fw-bold">
+          See All Products
+        </RouterLink>
       </div>
 
       <div class="row g-4">
@@ -50,12 +53,17 @@ const products = computed(() => store.state.product.products)
     <section class="container py-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="fw-bold text-dark">New Product</h4>
-        <a href="#" class="text-success text-decoration-none small fw-bold">See all</a>
-      </div>
+        
+        <router-link 
+          :to="{ name: 'products', query: { sort: 'newest' } }" 
+          class="text-success text-decoration-none small fw-bold">
+          See all Products
+        </router-link>
+        </div>
 
       <div class="row g-4">
         <div v-for="item in newProducts" :key="item.id" class="col-6 col-md-3">
-           <ProductCard :product="item" />
+          <ProductCard :product="item" />
         </div>
       </div>
     </section>

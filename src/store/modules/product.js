@@ -16,14 +16,16 @@ export default {
         .slice(0, 4)
     },
     
-    newProducts: (state) => {
-      return [...state.products]
-        .sort((a, b) => {
-          const dateA = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0)
-          const dateB = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0)
-          return dateB - dateA
-        })
-        .slice(0, 4)
+    allProductsSorted: (state) => {
+      return [...state.products].sort((a, b) => {
+        const dateA = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0)
+        const dateB = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0)
+        return dateB - dateA
+      })
+    },
+
+    newProducts: (state, getters) => {
+      return getters.allProductsSorted.slice(0, 4) 
     },
 
     allProducts: (state) => state.products

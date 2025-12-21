@@ -26,7 +26,7 @@ const formatCurrency = (price) => {
         <p class="card-text text-muted mb-1 text-truncate">{{ product.name }}</p>
         <div class="d-flex justify-content-between align-items-center small text-muted">
           <span>{{ product.size }} / {{ product.brand }}</span>
-          <span><i class="bi bi-heart"></i> 12</span>
+          <span><i class="bi bi-heart"></i>{{ product.likeCount}}</span>
           </div>
         </div>
 

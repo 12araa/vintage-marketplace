@@ -7,6 +7,7 @@ import UserView from '@/views/UserView.vue'
 import TransactionHistory from '@/components/user/TransactionHistory.vue'
 import UserProfile from '@/components/user/UserProfile.vue'
 import ChangePassword from '@/components/user/ChangePassword.vue'
+import AllProducts from '@/components/product/AllProducts.vue'
 
 const routes = [
   {
@@ -43,6 +44,11 @@ const routes = [
     path: '/order-confirmation',
     name: 'order-confirmation',
     component: OrderConfirmationView
+  },
+  {
+    path: '/products',
+    name: 'products',
+    component: AllProducts
   },
   {
     path: '/user',
