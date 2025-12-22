@@ -7,6 +7,7 @@ import BrandList from '@/components/product/BrandList.vue'
 
 const store = useStore()
 
+
 onMounted(() => {
   store.dispatch('product/fetchProducts')
 })

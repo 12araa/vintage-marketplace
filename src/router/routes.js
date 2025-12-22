@@ -8,6 +8,7 @@ import TransactionHistory from '@/components/user/TransactionHistory.vue'
 import UserProfile from '@/components/user/UserProfile.vue'
 import ChangePassword from '@/components/user/ChangePassword.vue'
 import AllProducts from '@/components/product/AllProducts.vue'
+import WishlistView from '@/views/WishlistView.vue'
 
 const routes = [
   {
@@ -70,7 +71,12 @@ const routes = [
             component: ChangePassword
         }
     ]
-  }
+  },
+  {
+    path: '/wishlist',
+    name: 'wishlist-view',
+    component: WishlistView
+  },
 
 ]
 

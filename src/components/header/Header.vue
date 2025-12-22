@@ -1,14 +1,30 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
 
 const store = useStore()
 const router = useRouter()
 const searchKeyword = ref('')
 
 const isLoggedIn = computed(() => store.state.auth.user !== null)
+const fetchCount = () => {
+  store.dispatch('product/fetchWishlistCount');
+}
+
+onMounted(() => {
+  if (isLoggedIn.value) {
+    store.dispatch('product/fetchWishlistCount');
+  }
+});
+
+watch(isLoggedIn, (newValue) => {
+  if (newValue === true) {
+    fetchCount();
+  } else {
+    store.commit('product/SET_WISHLIST_COUNT', 0); 
+  }
+});
 
 const user = computed(() => store.state.auth.user)
 
@@ -28,8 +44,8 @@ const handleSearch = () => {
   }
 };
 
-const cartCount = computed(() => store.getters['cart/cartCount'])
-const wishlistCount = 3
+const cartCount = computed(() => store.getters['cart/cartCount']);
+const wishlistCount = computed(() => store.getters['product/getWishlistCount']);
 </script>
 
 <template>
@@ -81,12 +97,12 @@ const wishlistCount = 3
             </li>
             
             <li class="nav-item position-relative">
-              <a href="#" class="nav-link text-dark fs-5">
+              <router-link to="/wishlist" class="nav-link text-dark fs-5">
                 <i class="bi bi-heart"></i>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
                   {{ wishlistCount }}
                 </span>
-              </a>
+              </router-link>
             </li>
 
             <li class="nav-item dropdown">

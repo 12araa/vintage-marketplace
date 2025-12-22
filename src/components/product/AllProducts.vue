@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'; 
+import { computed, onMounted, ref, watch } from 'vue'; 
 import { useRoute, useRouter } from 'vue-router'; 
 import { useStore } from 'vuex';
 import ProductCard from './ProductCard.vue';
@@ -10,9 +10,45 @@ const router = useRouter();
 
 const loading = ref(false);
 
+const currentPage = ref(1);
+const itemsPerPage = 20;
+
 const searchQuery = computed(() => route.query.q || '');
 const brandFilter = computed(() => route.query.brand || '');
 const sortFilter  = computed(() => route.query.sort || '');
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredProducts.value.length / itemsPerPage);
+});
+
+const paginatedProducts = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredProducts.value.slice(start, end);
+});
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+  scrollToTop();
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+  scrollToTop();
+};
+
+const goToPage = (page) => {
+  currentPage.value = page;
+  scrollToTop();
+};
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+watch([searchQuery, brandFilter, sortFilter], () => {
+  currentPage.value = 1;
+});
 
 const storeProducts = computed(() => {
   return store.getters['product/allProductsSorted'] || store.getters['allProductsSorted'] || [];
@@ -88,9 +124,32 @@ onMounted(async () => {
     </div>
 
     <div v-else class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-3">
-      <div class="col" v-for="item in filteredProducts" :key="item.id">
+      <div class="col" v-for="item in paginatedProducts" :key="item.id">
         <ProductCard :product="item" />
       </div>
+    </div>
+
+    <div v-if="totalPages > 1" class="d-flex justify-content-center align-items-center mt-5 gap-2">
+      <button 
+        @click="prevPage" 
+        class="btn btn-outline-dark btn-sm"
+        :disabled="currentPage === 1"
+      >
+        <i class="bi bi-chevron-left"></i> Prev
+      </button>
+
+      <span class="small text-muted fw-bold mx-2">
+        Page {{ currentPage }} of {{ totalPages }}
+      </span>
+
+      <button 
+        @click="nextPage" 
+        class="btn btn-outline-dark btn-sm"
+        :disabled="currentPage === totalPages"
+      >
+        Next <i class="bi bi-chevron-right"></i>
+      </button>
+
     </div>
 
   </div>
