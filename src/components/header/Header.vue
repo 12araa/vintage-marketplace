@@ -2,27 +2,50 @@
 import { computed, ref, onMounted, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { db } from '@/firebase'
+import { doc, onSnapshot } from 'firebase/firestore'
 
 const store = useStore()
 const router = useRouter()
 const searchKeyword = ref('')
+const userPhoto = ref(null)
+const userName = ref('User')
+let unsubscribe = null
 
 const isLoggedIn = computed(() => store.state.auth.user !== null)
 const fetchCount = () => {
   store.dispatch('product/fetchWishlistCount');
 }
 
+const listenToUserData = () => {
+  if (user.value) {
+    // onSnapshot akan jalan setiap kali ada perubahan di database
+    unsubscribe = onSnapshot(doc(db, "users", user.value.uid), (doc) => {
+      if (doc.exists()) {
+        const data = doc.data()
+        userPhoto.value = data.photoURL || null
+        userName.value = data.fullname || user.value.displayName || 'User'
+      }
+    });
+  }
+}
+
 onMounted(() => {
   if (isLoggedIn.value) {
     store.dispatch('product/fetchWishlistCount');
+    listenToUserData();
   }
 });
 
 watch(isLoggedIn, (newValue) => {
   if (newValue === true) {
     fetchCount();
+    listenToUserData();
   } else {
     store.commit('product/SET_WISHLIST_COUNT', 0); 
+    if (unsubscribe) unsubscribe();
+    userPhoto.value = null;
+    userName.value = 'User';
   }
 });
 
@@ -107,7 +130,14 @@ const wishlistCount = computed(() => store.getters['product/getWishlistCount']);
 
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
-                <img src="https://ui-avatars.com/api/?name=User+Name&background=random" class="rounded-circle" width="32" height="32" alt="User">
+                <img 
+                  :src="userPhoto || 'https://ui-avatars.com/api/?name=' + userName + '&background=random'" 
+                  class="rounded-circle border border-white shadow-sm" 
+                  width="32" 
+                  height="32" 
+                  style="object-fit: cover;"
+                  alt="User"
+                >
               </a>
               <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
                 <li><router-link to="/user/profile" class="dropdown-item">Profile</router-link></li>
