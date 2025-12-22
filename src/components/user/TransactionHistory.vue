@@ -103,10 +103,17 @@ onMounted(async () => {
             <div class="col-md-3 col-12 text-md-end mt-3 mt-md-0">
               <small class="text-muted d-block mb-1">Total Price</small>
               <h6 class="fw-bold mb-3">{{ formatCurrency(order.totalPrice) }}</h6>
-              
-              <router-link :to="'/product/' + order.items[0].id" class="btn btn-sm btn-outline-success w-100 fw-bold" style="color: #008080; border-color: #008080;">
-                Buy Again
-              </router-link>
+              <div class="d-flex flex-row gap-2 justify-content-md-end justify-content-start">
+                <router-link 
+                  :to="'/product/' + order.items[0].id" 
+                  class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1"
+                >
+                  <i class="bi bi-star"></i> Review
+                </router-link>
+                <router-link :to="'/product/' + order.items[0].id" class="btn btn-sm btn-outline-success fw-bold" style="color: #008080; border-color: #008080;">
+                  Buy Again
+                </router-link>
+              </div>
             </div>
 
           </div>
