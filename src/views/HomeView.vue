@@ -23,7 +23,10 @@ const products = computed(() => store.state.product.products)
       <div class="container d-flex align-items-center justify-content-between flex-wrap-reverse">
         <div class="banner-text col-lg-5">
           <h1 class="fw-bold display-4 mb-3" style="color: #002d2d;">Ready to declutter <br> your closet?</h1>
-          <button class="btn btn-success px-5 py-2 rounded-0" href="HomeView.vue" style="background-color: #008080; border:none;">Shop Now</button>
+          <RouterLink :to="{ name: 'products' }" 
+          class="btn btn-success px-5 py-2 rounded-0" style="background-color: #008080; border:none;" >
+            Shop Now
+          </RouterLink>
         </div>
         <div class="col-lg-6 mb-4 mb-lg-0">
              <img src="@/assets/images/Banner.png" class="img-fluid rounded shadow-sm" alt="Banner">

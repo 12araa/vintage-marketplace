@@ -29,7 +29,8 @@ const routes = [
   {
     path: '/cart',
     name: 'cart',
-    component: () => import('../views/CartView.vue')
+    component: () => import('../views/CartView.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/product/:id',
@@ -44,7 +45,8 @@ const routes = [
   {
     path: '/order-confirmation',
     name: 'order-confirmation',
-    component: OrderConfirmationView
+    component: OrderConfirmationView,
+    meta: { requiresAuth: true }
   },
   {
     path: '/products',
@@ -84,5 +86,18 @@ const router = createRouter({
   history: createWebHistory('/'),
   routes
 })
+
+import { auth } from '@/firebase'; 
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const currentUser = auth.currentUser;
+
+  if (requiresAuth && !currentUser) {
+    next('/login'); 
+  } else {
+    next(); 
+  }
+});
 
 export default router
